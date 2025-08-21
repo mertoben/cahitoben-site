@@ -6,12 +6,12 @@ declare global {
 }
 
 type Props = {
-  posts: string[] // public post URLs like https://www.instagram.com/p/XXXXXXXX/
+  posts: string[]
+  showCaptions?: boolean
 }
 
-export default function InstagramEmbed({ posts }: Props){
+export default function InstagramEmbed({ posts, showCaptions = true }: Props){
   useEffect(() => {
-    // load embed.js once
     const existing = document.getElementById('ig-embed-sdk')
     if(!existing){
       const s = document.createElement('script')
@@ -19,10 +19,9 @@ export default function InstagramEmbed({ posts }: Props){
       s.async = true
       s.src = 'https://www.instagram.com/embed.js'
       document.body.appendChild(s)
-      s.onload = () => window.instgrm && window.instgrm.Embeds && window.instgrm.Embeds.process()
+      s.onload = () => window.instgrm?.Embeds?.process()
     }else{
-      // re-process after route changes
-      window.instgrm && window.instgrm.Embeds && window.instgrm.Embeds.process()
+      window.instgrm?.Embeds?.process()
     }
   }, [posts])
 
@@ -36,7 +35,17 @@ export default function InstagramEmbed({ posts }: Props){
           className="instagram-media"
           data-instgrm-permalink={url}
           data-instgrm-version="14"
-          style={{ background:'#fff', border:0, margin:0, padding:0, minWidth: '326px', width:'100%', maxWidth:'540px' }}
+          // Captions: Instagram resmi dokümantasyonda mevcut bayrak
+          {...(showCaptions ? { 'data-instgrm-captioned': '' } : {})}
+          style={{
+            background:'#fff',
+            border:0,
+            margin:0,
+            padding:0,
+            minWidth:'326px',
+            width:'100%',
+            maxWidth:'540px'
+          }}
         >
           <a href={url} target="_blank" rel="noopener noreferrer">Instagram Post</a>
         </blockquote>
