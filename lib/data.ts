@@ -1,5 +1,17 @@
+
 export const ARTWORKS = [
-  { id:'soyut-1',  title:'Soyut Kompozisyon I',  year:2022, series:'Soyut',  image:'/assets/art/soyut1.jpg' },
-  { id:'soyut-2',  title:'Soyut Kompozisyon II', year:2023, series:'Soyut',  image:'/assets/art/soyut2.jpg' },
-  { id:'peyzaj-1', title:'Peyzaj I',             year:2021, series:'Peyzaj', image:'/assets/art/peyzaj1.jpg' }
-]
+  {
+    id: "1",
+    title: "Soyut Kompozisyon",
+    series: "Modern Çalışmalar",
+    image: "/images/art1.jpg",
+    description: "Cahit Oben’in renk ve form üzerine denemelerinden biri."
+  },
+  {
+    id: "2",
+    title: "Doğa ve İnsan",
+    series: "Figüratif",
+    image: "/images/art2.jpg",
+    description: "İnsan ve doğanın birlikteliğini anlatan çalışma."
+  }
+];
