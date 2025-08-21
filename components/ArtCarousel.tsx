@@ -1,26 +1,32 @@
-"use client";
-import { useRef } from "react";
-import { WORKS } from "@/lib/art";
 
-export default function ArtCarousel() {
-  const ref = useRef<HTMLDivElement>(null);
-  const scroll = (dir: "left" | "right") => {
-    if (ref.current) {
-      ref.current.scrollBy({ left: dir === "left" ? -300 : 300, behavior: "smooth" });
-    }
-  };
+"use client";
+import Image from "next/image";
+import { useState } from "react";
+
+export default function ArtCarousel({ items }) {
+  const [index, setIndex] = useState(0);
+  const next = () => setIndex((index + 1) % items.length);
+  const prev = () => setIndex((index - 1 + items.length) % items.length);
+
   return (
-    <div className="relative">
-      <div ref={ref} className="flex overflow-x-auto gap-4 pb-4">
-        {WORKS.slice(0, 8).map(w => (
-          <div key={w.id} className="min-w-[200px]">
-            <img src={w.image} alt={w.title} className="rounded-lg mb-2" />
-            <h4 className="font-medium">{w.title}</h4>
-          </div>
-        ))}
+    <div className="relative w-full max-w-3xl mx-auto">
+      <div className="relative h-96">
+        <Image
+          src={items[index].image}
+          alt={items[index].title}
+          fill
+          className="object-contain rounded-lg"
+        />
       </div>
-      <button onClick={() => scroll("left")} className="absolute left-0 top-1/2 -translate-y-1/2 bg-white/80 px-2 py-1 rounded-full shadow">‹</button>
-      <button onClick={() => scroll("right")} className="absolute right-0 top-1/2 -translate-y-1/2 bg-white/80 px-2 py-1 rounded-full shadow">›</button>
+      <div className="flex justify-between mt-2">
+        <button onClick={prev} className="px-3 py-1 bg-gray-700 text-white rounded">Prev</button>
+        <button onClick={next} className="px-3 py-1 bg-gray-700 text-white rounded">Next</button>
+      </div>
+      <div className="text-center mt-2">
+        <h2 className="font-semibold">{items[index].title}</h2>
+        {items[index].series && <div className="text-xs text-zinc-500">{items[index].series}</div>}
+        {items[index].description && <p className="text-sm mt-1">{items[index].description}</p>}
+      </div>
     </div>
   );
 }
