@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { --accent: #ec6b2e; }
+.text-muted { color: #6b7280; } /* gray-500 */
+.bg-card { background: white; }
