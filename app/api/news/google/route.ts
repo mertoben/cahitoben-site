@@ -1,13 +1,12 @@
 import Parser from 'rss-parser'
 
-export const runtime = 'nodejs' // use Node runtime (rss-parser uses node modules)
-export const revalidate = 3600  // cache for 1 hour
+export const runtime = 'nodejs'
+export const revalidate = 300
 
 type GItem = {
   title?: string
   link?: string
   pubDate?: string
-  content?: string
   contentSnippet?: string
   isoDate?: string
 }
