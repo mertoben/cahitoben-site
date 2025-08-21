@@ -28,12 +28,13 @@ export default function ArtPage(){
 
         <section className="mt-12">
           <div className="flex items-baseline justify-between">
-            <h2 className="text-xl font-bold">Instagram’dan</h2>
+            <h2 className="text-xl font-bold">Cahit Oben Art Instagram Sayfası</h2>
             <a href="https://www.instagram.com/cahitobenart/" target="_blank" className="text-sm underline">Profili aç</a>
           </div>
-          <p className="mt-1 text-sm text-zinc-500">
+         /* <p className="mt-1 text-sm text-zinc-500">
             Instagram gönderileri resmi embed ile gösterilir. Yeni gönderi eklemek için <code>lib/instagram.ts</code> içine URL ekleyin.
           </p>
+          */
           <div className="mt-4">
             <InstagramEmbed posts={INSTAGRAM_POSTS} />
           </div>
