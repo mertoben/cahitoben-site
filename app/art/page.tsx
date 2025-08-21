@@ -9,8 +9,8 @@ export async function generateMetadata({ params }:{ params:{ id:string } }){
   const a = ARTWORKS.find(w => w.id === params.id)
   return {
     title: a ? `${a.title} — Resim` : 'Resim',
-    // year opsiyonel; varsa göster, yoksa sadece seri ya da boş
-    description: a ? [a.year, a.series].filter(Boolean).join(' • ') : ''
+    // 'year' alanına güvenmeyelim; yalnızca mevcut olanları yaz
+    description: a ? [a.series].filter(Boolean).join(' • ') : ''
   }
 }
 
@@ -37,9 +37,9 @@ export default function ArtDetailPage({ params }:{ params:{ id:string } }){
           </div>
           <div className="lg:col-span-2">
             <h1 className="text-3xl font-extrabold">{a.title}</h1>
-            {(a.year || a.series) && (
+            {a.series && (
               <div className="mt-1 text-sm text-zinc-500">
-                {[a.year, a.series].filter(Boolean).join(' • ')}
+                {a.series}
               </div>
             )}
             {a.description && <p className="mt-4 text-zinc-700">{a.description}</p>}
