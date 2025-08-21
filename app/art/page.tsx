@@ -1,44 +1,69 @@
+import Link from 'next/link'
 import { ARTWORKS } from '@/lib/data'
-import InstagramEmbed from '@/components/InstagramEmbed'
-import { INSTAGRAM_POSTS } from '@/lib/instagram'
 
-export const metadata = {
-  title: 'Resim Çalışmaları — Cahit Oben',
-  description: 'Resim seçkisi ve Instagram paylaşımları.'
+export function generateStaticParams() {
+  return ARTWORKS.map(w => ({ id: w.id }))
 }
 
-export default function ArtPage(){
+export async function generateMetadata({ params }:{ params:{ id:string } }){
+  const a = ARTWORKS.find(w => w.id === params.id)
+  return {
+    title: a ? `${a.title} — Resim` : 'Resim',
+    // year opsiyonel; varsa göster, yoksa sadece seri ya da boş
+    description: a ? [a.year, a.series].filter(Boolean).join(' • ') : ''
+  }
+}
+
+export default function ArtDetailPage({ params }:{ params:{ id:string } }){
+  const a = ARTWORKS.find(w => w.id === params.id)
+  if(!a){
+    return (
+      <main className="py-12">
+        <div className="mx-auto max-w-3xl px-4">
+          <h1 className="text-2xl font-bold">Eser bulunamadı</h1>
+          <p className="mt-2 text-zinc-600">Bu eser kaldırılmış veya URL değişmiş olabilir.</p>
+          <Link href="/art" className="mt-4 inline-block underline">← Resim Çalışmaları</Link>
+        </div>
+      </main>
+    )
+  }
+
   return (
     <main className="py-12">
-      <div className="mx-auto max-w-6xl px-4">
-        <h1 className="text-3xl font-extrabold">Resim Çalışmaları</h1>
-
-        <section className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {ARTWORKS.map((w: any) => (
-            <article key={w.id} className="rounded-xl border border-zinc-200 bg-white overflow-hidden">
-              <img src={w.image} alt={w.title} className="w-full h-60 object-cover" />
-              <div className="p-4">
-                <h2 className="font-semibold">{w.title}</h2>
-                {w.series && <div className="text-xs text-zinc-500 mt-1">{w.series}</div>}
-                {w.description && <p className="text-sm mt-2">{w.description}</p>}
+      <div className="mx-auto max-w-5xl px-4">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+          <div className="lg:col-span-3 rounded-2xl overflow-hidden border bg-white">
+            <img src={a.image} alt={a.title} className="w-full h-auto object-contain" />
+          </div>
+          <div className="lg:col-span-2">
+            <h1 className="text-3xl font-extrabold">{a.title}</h1>
+            {(a.year || a.series) && (
+              <div className="mt-1 text-sm text-zinc-500">
+                {[a.year, a.series].filter(Boolean).join(' • ')}
               </div>
-            </article>
-          ))}
-        </section>
+            )}
+            {a.description && <p className="mt-4 text-zinc-700">{a.description}</p>}
 
-        <section className="mt-12">
-          <div className="flex items-baseline justify-between">
-            <h2 className="text-xl font-bold">Cahit Oben Art Instagram Sayfası</h2>
-            <a href="https://www.instagram.com/cahitobenart/" target="_blank" className="text-sm underline">Profili aç</a>
+            <div className="mt-8">
+              <h2 className="text-sm font-semibold text-zinc-500">Benzer eserler</h2>
+              <div className="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {ARTWORKS.filter(w => w.id !== a.id && (w.series && a.series ? w.series === a.series : true)).slice(0,6).map(w => (
+                  <Link key={w.id} href={`/art/${w.id}`} className="group border rounded-xl overflow-hidden bg-white hover:shadow-sm transition">
+                    <img src={w.image} alt={w.title} className="aspect-[4/5] w-full object-cover group-hover:scale-[1.02] transition" />
+                    <div className="p-2">
+                      <div className="text-sm font-medium line-clamp-1">{w.title}</div>
+                      {w.series && <div className="text-[11px] text-zinc-500 line-clamp-1">{w.series}</div>}
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-8">
+              <Link href="/art" className="underline">← Tüm eserler</Link>
+            </div>
           </div>
-        <p className="mt-1 text-sm text-zinc-500">
-            /* Instagram gönderileri resmi embed ile gösterilir. Yeni gönderi eklemek için <code>lib/instagram.ts</code> içine URL ekleyin.*/
-          </p> 
-          
-          <div className="mt-4">
-            <InstagramEmbed posts={INSTAGRAM_POSTS} />
-          </div>
-        </section>
+        </div>
       </div>
     </main>
   )
