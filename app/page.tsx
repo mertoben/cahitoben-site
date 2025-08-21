@@ -1,35 +1,58 @@
-import Link from 'next/link'
+import Hero from "@/components/Hero";
+import Section from "@/components/Section";
+import AlbumCard from "@/components/AlbumCard";
+import ArtCarousel from "@/components/ArtCarousel";
+import { ALBUMS } from "@/lib/music";
+import { NEWS } from "@/lib/news";
+import { featured } from "@/lib/home";
 
-export const metadata = {
-  title: 'Cahit Oben — Resmî Site',
-  description: 'Diskografi, haberler ve resim çalışmaları.',
-}
-
-export default function Page(){
+export default function HomePage() {
+  const featuredAlbum = ALBUMS.find(a => a.id === featured.albumId);
   return (
-    <main className="py-12">
-      <div className="mx-auto max-w-6xl px-4">
-        <section className="grid gap-6 sm:grid-cols-2 items-center">
-          <div>
-            <h1 className="text-3xl font-extrabold tracking-tight">Cahit Oben</h1>
-            <p className="mt-2 text-sm text-muted">Türk pop müziğinin öncü isimlerinden; arşiv, diskografi ve resim çalışmaları.</p>
-            <div className="mt-4 flex gap-3 text-sm">
-              <Link href="/discography" className="rounded-md border px-3 py-2">Diskografi</Link>
-              <Link href="/art" className="rounded-md border px-3 py-2">Resim Çalışmaları</Link>
-              <Link href="/listen" className="rounded-md border px-3 py-2">Dinle</Link>
-            </div>
-          </div>
-          <div className="rounded-xl border border-zinc-200 aspect-[4/3] bg-zinc-100" />
-        </section>
-
-        <section className="mt-12">
-          <h2 className="text-lg font-semibold">Son Haberler</h2>
-          <ul className="mt-3 list-disc pl-6 text-sm">
-            <li><Link href="/news/arsiv-vol1-yayinda" className="underline">Arşiv Seçkileri Vol.1 duyuruldu</Link></li>
-            <li><Link href="/news/spotify-apple-guncel" className="underline">Spotify ve Apple Music sayfaları güncellendi</Link></li>
-          </ul>
-        </section>
-      </div>
+    <main>
+      <Hero />
+      {featuredAlbum && (
+        <Section title="Öne Çıkan Albüm">
+          <AlbumCard album={featuredAlbum} featured />
+        </Section>
+      )}
+      <Section title="Diskografi">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {ALBUMS.slice(0, 6).map(a => (
+            <AlbumCard key={a.id} album={a} />
+          ))}
+        </div>
+        <div className="mt-4 text-right">
+          <a href="/discography" className="text-blue-600 hover:underline">
+            Tüm Diskografi →
+          </a>
+        </div>
+      </Section>
+      <Section title="Resim Çalışmaları">
+        <ArtCarousel />
+        <div className="mt-4 text-right">
+          <a href="/art" className="text-blue-600 hover:underline">
+            Tüm Eserler →
+          </a>
+        </div>
+      </Section>
+      <Section title="Haberler">
+        <ul className="space-y-4">
+          {NEWS.slice(0, 4).map(n => (
+            <li key={n.id}>
+              <a href={`/news/${n.id}`} className="font-semibold hover:underline">
+                {n.title}
+              </a>
+              <p className="text-sm text-gray-600">{n.summary}</p>
+            </li>
+          ))}
+        </ul>
+        <div className="mt-4 text-right">
+          <a href="/news" className="text-blue-600 hover:underline">
+            Tüm Haberler →
+          </a>
+        </div>
+      </Section>
     </main>
-  )
+  );
 }
