@@ -14,7 +14,7 @@ export default function ArtPage(){
         <h1 className="text-3xl font-extrabold">Resim Çalışmaları</h1>
 
         <section className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {ARTWORKS.map((w) => (
+          {ARTWORKS.map((w: any) => (
             <article key={w.id} className="rounded-xl border border-zinc-200 bg-white overflow-hidden">
               <img src={w.image} alt={w.title} className="w-full h-60 object-cover" />
               <div className="p-4">
@@ -32,7 +32,7 @@ export default function ArtPage(){
             <a href="https://www.instagram.com/cahitobenart/" target="_blank" className="text-sm underline">Profili aç</a>
           </div>
           <p className="mt-1 text-sm text-zinc-500">
-            Instagram gönderileri resmi embed ile gösterilir. Henüz ekli değilse <code>lib/instagram.ts</code> içine gönderi URL’lerini ekleyin.
+            Instagram gönderileri resmi embed ile gösterilir. Yeni gönderi eklemek için <code>lib/instagram.ts</code> içine URL ekleyin.
           </p>
           <div className="mt-4">
             <InstagramEmbed posts={INSTAGRAM_POSTS} />
